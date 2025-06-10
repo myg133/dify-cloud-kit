@@ -35,6 +35,7 @@ var allCases = []testArgsCases{
 			S3: &oss.S3{
 				UseAws:       true,
 				UsePathStyle: true,
+				UseIamRole:   false,
 				AccessKey:    os.Getenv("AWS_S3_ACCESS_KEY"),
 				SecretKey:    os.Getenv("AWS_S3_SECRET_KEY"),
 				Bucket:       os.Getenv("AWS_S3_BUCKET"),

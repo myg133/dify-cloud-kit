@@ -37,12 +37,13 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 	endpoint := args.S3.Endpoint
 	usePathStyle := args.S3.UsePathStyle
 	bucket := args.S3.Bucket
+	useIamRole := args.S3.UseIamRole
 
 	var cfg aws.Config
 	var client *s3.Client
 
 	if useAws {
-		if ak == "" && sk == "" {
+		if (ak == "" && sk == "") || useIamRole {
 			cfg, err = config.LoadDefaultConfig(
 				context.TODO(),
 				config.WithRegion(region),

@@ -66,6 +66,7 @@ type S3 struct {
 	SecretKey    string
 	Bucket       string
 	Region       string
+	UseIamRole   bool
 }
 
 func (s *S3) Validate() error {
