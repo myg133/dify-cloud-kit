@@ -67,6 +67,7 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 			if endpoint != "" {
 				options.BaseEndpoint = aws.String(endpoint)
 			}
+			options.UsePathStyle = usePathStyle
 		})
 	} else {
 		client = s3.New(s3.Options{
