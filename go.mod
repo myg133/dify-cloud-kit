@@ -1,6 +1,6 @@
 module github.com/langgenius/dify-cloud-kit
 
-go 1.23.3
+go 1.23.0
 
 require (
 	cloud.google.com/go/storage v1.54.0
