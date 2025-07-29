@@ -46,7 +46,6 @@ func NewGoogleCloudStorage(args oss.OSSArgs) (oss.OSS, error) {
 func (g *GoogleCloudStorage) Save(key string, data []byte) error {
 	ctx := context.Background()
 	obj := g.client.Bucket(g.bucket).Object(key)
-	obj = obj.If(storage.Conditions{DoesNotExist: true})
 
 	wc := obj.NewWriter(ctx)
 	if _, err := wc.Write(data); err != nil {
