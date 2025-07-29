@@ -65,6 +65,7 @@ var allCases = []testArgsCases{
 				AuthVersion: os.Getenv("ALIYUN_OSS_AUTH_VERSION"),
 				Path:        os.Getenv("ALIYUN_OSS_PATH"),
 				Bucket:      os.Getenv("ALIYUN_OSS_BUCKET"),
+				CloudBoxId:  os.Getenv("ALIYUN_OSS_CLOUDBOX_ID"),
 			},
 		},
 		skip: false,
