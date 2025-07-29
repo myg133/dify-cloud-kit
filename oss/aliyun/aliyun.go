@@ -36,6 +36,7 @@ func NewAliyunOSSStorage(args difyoss.OSSArgs) (difyoss.OSS, error) {
 	authVersion := args.AliyunOSS.AuthVersion
 	path := args.AliyunOSS.Path
 	bucketName := args.AliyunOSS.Bucket
+	cloudboxId := args.AliyunOSS.CloudBoxId
 
 	// options
 	var options []oss.ClientOption
@@ -43,6 +44,10 @@ func NewAliyunOSSStorage(args difyoss.OSSArgs) (difyoss.OSS, error) {
 	// set region (required for v4)
 	if region != "" {
 		options = append(options, oss.Region(region))
+	}
+
+	if cloudboxId != "" {
+		options = append(options, oss.CloudBoxId(cloudboxId))
 	}
 
 	// set auth-version
