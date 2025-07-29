@@ -109,6 +109,7 @@ type AliyunOSS struct {
 	AuthVersion string
 	Path        string
 	Bucket      string
+	CloudBoxId  string
 }
 
 func (a *AliyunOSS) Validate() error {
