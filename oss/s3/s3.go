@@ -38,6 +38,7 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 	usePathStyle := args.S3.UsePathStyle
 	bucket := args.S3.Bucket
 	useIamRole := args.S3.UseIamRole
+	signatureVersion := args.S3.SignatureVersion
 
 	var cfg aws.Config
 	var client *s3.Client
@@ -49,14 +50,22 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 				config.WithRegion(region),
 			)
 		} else {
-			cfg, err = config.LoadDefaultConfig(
-				context.TODO(),
-				config.WithRegion(region),
-				config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
+			// 处理签名版本和凭证
+			var credProvider aws.CredentialsProvider
+			if strings.ToLower(signatureVersion) == "unsigned" {
+				credProvider = aws.AnonymousCredentials{}
+			} else {
+				credProvider = credentials.NewStaticCredentialsProvider(
 					ak,
 					sk,
 					"",
-				)),
+				)
+			}
+
+			cfg, err = config.LoadDefaultConfig(
+				context.TODO(),
+				config.WithRegion(region),
+				config.WithCredentialsProvider(credProvider),
 			)
 		}
 		if err != nil {
@@ -70,19 +79,26 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 			options.UsePathStyle = usePathStyle
 		})
 	} else {
+		var credProvider aws.CredentialsProvider
+		if strings.ToLower(signatureVersion) == "unsigned" {
+			credProvider = aws.AnonymousCredentials{}
+		} else {
+			credProvider = credentials.NewStaticCredentialsProvider(ak, sk, "")
+		}
 		client = s3.New(s3.Options{
-			Credentials:  credentials.NewStaticCredentialsProvider(ak, sk, ""),
+			Credentials:  credProvider,
 			UsePathStyle: usePathStyle,
 			Region:       region,
 			EndpointResolver: s3.EndpointResolverFunc(
 				func(region string, options s3.EndpointResolverOptions) (aws.Endpoint, error) {
+					signingMethod := normalizeSignatureVersion(signatureVersion)
 					return aws.Endpoint{
 						URL:               endpoint,
 						HostnameImmutable: false,
 						SigningName:       "s3",
 						PartitionID:       "aws",
 						SigningRegion:     region,
-						SigningMethod:     "v4",
+						SigningMethod:     signingMethod,
 						Source:            aws.EndpointSourceCustom,
 					}, nil
 				}),
@@ -105,6 +121,17 @@ func NewS3Storage(args oss.OSSArgs) (oss.OSS, error) {
 		}
 	}
 	return &S3Storage{bucket: bucket, client: client}, nil
+}
+
+func normalizeSignatureVersion(version string) string {
+	switch strings.ToLower(version) {
+	case "unsigned":
+		return ""
+	case "":
+		return "v4"  // 默认使用 v4
+	default:
+		return version
+	}
 }
 
 func (s *S3Storage) Save(key string, data []byte) error {

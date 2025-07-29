@@ -67,6 +67,7 @@ type S3 struct {
 	Bucket       string
 	Region       string
 	UseIamRole   bool
+	SignatureVersion string
 }
 
 func (s *S3) Validate() error {
