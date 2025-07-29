@@ -153,6 +153,7 @@ type HuaweiOBS struct {
 	AccessKey string
 	SecretKey string
 	Server    string
+	PathStyle string
 }
 
 func (h *HuaweiOBS) Validate() error {
