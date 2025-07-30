@@ -59,14 +59,14 @@ type OSSArgs struct {
 }
 
 type S3 struct {
-	UseAws       bool
-	Endpoint     string
-	UsePathStyle bool
-	AccessKey    string
-	SecretKey    string
-	Bucket       string
-	Region       string
-	UseIamRole   bool
+	UseAws           bool
+	Endpoint         string
+	UsePathStyle     bool
+	AccessKey        string
+	SecretKey        string
+	Bucket           string
+	Region           string
+	UseIamRole       bool
 	SignatureVersion string
 }
 
@@ -154,6 +154,7 @@ type HuaweiOBS struct {
 	AccessKey string
 	SecretKey string
 	Server    string
+	PathStyle bool
 }
 
 func (h *HuaweiOBS) Validate() error {
