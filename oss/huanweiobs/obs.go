@@ -3,7 +3,6 @@ package huanweiobs
 import (
 	"io"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -31,10 +30,7 @@ func NewHuaweiOBSStorage(args oss.OSSArgs) (oss.OSS, error) {
 	sk := args.HuaweiOBS.SecretKey
 	endpoint := args.HuaweiOBS.Server
 	bucket := args.HuaweiOBS.Bucket
-	pathStyle := false
-	if args.HuaweiOBS.PathStyle != "" {
-		pathStyle, _ = strconv.ParseBool(args.HuaweiOBS.PathStyle)
-	}
+	pathStyle := args.HuaweiOBS.PathStyle
 	client, err := obs.New(ak, sk, endpoint, obs.WithPathStyle(pathStyle))
 	if err != nil {
 		return nil, oss.ErrProviderInit.WithError(err)

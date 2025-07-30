@@ -100,7 +100,7 @@ var allCases = []testArgsCases{
 				AccessKey: os.Getenv("HUAWEI_OBS_ACCESS_KEY"),
 				SecretKey: os.Getenv("HUAWEI_OBS_SECRET_KEY"),
 				Server:    os.Getenv("HUAWEI_OBS_SERVER"),
-				PathStyle: os.Getenv("HUAWEI_OBS_PATH_STYLE"),
+				PathStyle: true,
 			},
 		},
 		skip: false,
